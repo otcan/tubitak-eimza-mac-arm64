@@ -46,7 +46,7 @@ sublimity-esign-client-swingui-1.21.0-SNAPSHOT-jar-with-dependencies.jar
 
 This is a TÜBİTAK-specific launcher. It rejects other codebases, application classes, JAR versions, signing destinations, duplicate parameters, external XML entities, oversized files, and symbolic links.
 
-Verified on an Apple Silicon Mac running **macOS 26.2**: native app launch, bundled Java execution, and opening a real TÜBİTAK signing request. USB reader enumeration is implemented through the official libraries; additional card/provider combinations need testing. Confirm the final signing result on the TÜBİTAK website.
+**End-to-end signing confirmed by a user on 16 November 2026**, on an Apple Silicon Mac running **macOS 26.2**: the app opened a real TÜBİTAK JNLP request using its bundled Java runtime, and TÜBİTAK confirmed the resulting signature. This is one confirmed setup; additional card, driver, and provider combinations need testing.
 
 ## Build and test
 
