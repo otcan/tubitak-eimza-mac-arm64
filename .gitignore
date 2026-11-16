@@ -1,0 +1,13 @@
+.DS_Store
+/build/
+/.cache/
+*.class
+*.jar
+*.jnlp
+*.jlpn
+*.log
+*.dmg
+*.pkg
+*.zip
+*.tar.gz
+*.part
