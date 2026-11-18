@@ -32,8 +32,25 @@ if pgrep -x TubitakSigningHelper >/dev/null 2>&1; then
     exit 1
 fi
 built_app=$(cd "$source_dir/build/TUBITAK Signing Helper.app" && pwd -P)
-ditto --norsrc --noextattr "$built_app" "$app"
-codesign --verify --deep --strict "$app"
+stage_root=$(mktemp -d "$install_dir/.tubitak-install.XXXXXX")
+cleanup() {
+    if [ ! -e "$app" ] && [ -d "$stage_root/previous.app" ]; then
+        mv "$stage_root/previous.app" "$app"
+    fi
+    rm -rf -- "$stage_root"
+}
+trap cleanup EXIT
+# Replace the complete bundle so removed resources from older versions cannot
+# remain behind and invalidate the new code signature.
+ditto --norsrc --noextattr "$built_app" "$stage_root/new.app"
+codesign --verify --deep --strict "$stage_root/new.app"
+if [ -e "$app" ]; then mv "$app" "$stage_root/previous.app"; fi
+mv "$stage_root/new.app" "$app"
+if ! codesign --verify --deep --strict "$app"; then
+    rm -rf -- "$app"
+    echo 'The installed signature check failed; restoring the previous app.' >&2
+    exit 1
+fi
 '/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister' -f "$app"
 echo "Installed: $app"
 echo 'Open the helper and choose Open JNLP… to select a fresh TÜBİTAK signing request.'

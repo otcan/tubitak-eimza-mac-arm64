@@ -29,7 +29,9 @@ mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources/Java" "$app/Contents/Res
 "$runtime_home/bin/javac" -cp "$official_jar" -d "$app/Contents/Resources/Java" "$repo_root/src/TubitakJnlpLauncher.java"
 swiftc -swift-version 5 -target arm64-apple-macosx13.0 -O -framework Cocoa "$repo_root/src/Launcher.swift" -o "$app/Contents/MacOS/TubitakSigningHelper"
 /usr/bin/ditto --norsrc --noextattr "$runtime_home/jre" "$app/Contents/Resources/Runtime"
-/usr/bin/ditto --norsrc --noextattr "$official_jar" "$app/Contents/Resources/Java/tubitak-esign-1.21.0.jar"
+zsh "$repo_root/scripts/build-icon.sh" "$app/Contents/Resources/AppIcon.icns"
+cp "$repo_root/LICENSE" "$app/Contents/Resources/Licenses/HELPER-LICENSE"
+cp "$repo_root/THIRD_PARTY_NOTICES.md" "$app/Contents/Resources/Licenses/THIRD_PARTY_NOTICES.md"
 for license_name in LICENSE ASSEMBLY_EXCEPTION THIRD_PARTY_README; do
     cp "$runtime_home/$license_name" "$app/Contents/Resources/Licenses/$license_name"
 done
@@ -43,9 +45,10 @@ p.write_bytes(plistlib.dumps({
     'CFBundleName':'TUBITAK Signing Helper',
     'CFBundleDisplayName':'TÜBİTAK Signing Helper',
     'CFBundleExecutable':'TubitakSigningHelper',
+    'CFBundleIconFile':'AppIcon',
     'CFBundlePackageType':'APPL',
-    'CFBundleShortVersionString':'0.1.0',
-    'CFBundleVersion':'1',
+    'CFBundleShortVersionString':'0.2.0',
+    'CFBundleVersion':'2',
     'LSMinimumSystemVersion':'13.0',
     'NSHighResolutionCapable':True,
     'NSDownloadsFolderUsageDescription':'Open the TÜBİTAK signing request you choose from Downloads.',

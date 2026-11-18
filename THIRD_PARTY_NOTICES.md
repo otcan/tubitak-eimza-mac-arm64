@@ -11,12 +11,14 @@ The generated application includes the distribution's `LICENSE`, `ASSEMBLY_EXCEP
 
 No Java runtime binary is committed to this repository.
 
+Binary releases include the matching, unmodified Corretto `8.512.09.1` source archive as a separate download, alongside checksums. The runtime's Java launcher is re-signed for this app's hardened-runtime configuration; the runtime code is not patched.
+
 ## TÜBİTAK signing application and libraries
 
-The build downloads `sublimity-esign-client-swingui-1.21.0-SNAPSHOT-jar-with-dependencies.jar` directly from TÜBİTAK's `e-imza.tubitak.gov.tr` service. Its SHA-256 is pinned in the build scripts and its original JAR signature is verified.
+The build downloads `sublimity-esign-client-swingui-1.21.0-SNAPSHOT-jar-with-dependencies.jar` directly from TÜBİTAK's `e-imza.tubitak.gov.tr` service for compilation. Its SHA-256 is pinned in the build scripts and its original JAR signature is verified. The JAR is not included in the built app or release DMG. The app downloads it directly from TÜBİTAK on first use and checks the pinned SHA-256 before each launch.
 
 This repository does not contain or relicense TÜBİTAK's application, ESYA/MA3 libraries, or their bundled dependencies. Those components retain their original ownership, licensing, and service requirements. The helper supplies the launch environment; it does not patch the original JAR.
 
 ## AKİS and other card drivers
 
-Card drivers are installed separately from their publishers and are not bundled or relicensed by this project. AKİS drivers are available from [TÜBİTAK BİLGEM](https://akiskart.bilgem.tubitak.gov.tr/tr/destek/).
+Card drivers are installed separately from their publishers and are not bundled or relicensed by this project. The setup button downloads the reviewed AKİA ARM 6.8.13 installer directly from [TÜBİTAK BİLGEM](https://akiskart.bilgem.tubitak.gov.tr/en/support/), verifies it and opens Apple's Installer. Installation remains subject to the publisher's terms and macOS approval.
