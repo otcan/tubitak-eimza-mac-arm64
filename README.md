@@ -2,18 +2,20 @@
 
 A macOS helper that opens TÜBİTAK's `.jnlp` signing requests in its original signing application, with **ARM64 Java 8 included inside the app**. Select the documents, choose your certificate, and enter your USB card PIN in the TÜBİTAK signing window.
 
-This is an **unofficial community project**, independent of TÜBİTAK and Kamu SM. It does not modify TÜBİTAK's signing algorithms or original signed JAR. The repository contains the launcher, installer, and build scripts; the official application and Java runtime are downloaded from their publishers when you build it.
+This is an **unofficial community project**, independent of TÜBİTAK and Kamu SM. It does not modify TÜBİTAK's signing algorithms or original signed JAR. The app includes Java; it downloads the original signing client directly from TÜBİTAK on first use, verifies its pinned SHA-256, and caches it privately. The repository contains the launcher, installer, and build scripts.
 
 ## Requirements
 
 - An Apple Silicon Mac with macOS 13 or later.
-- Xcode Command Line Tools. The installer starts Apple's installation prompt if they are missing; finish that installation and run the command again.
-- A USB e-signature reader, card, and an appropriate ARM64 card driver. For AKİS, use the **Mac OS Arm (Apple Silicon)** package from [TÜBİTAK BİLGEM's AKİS support page](https://akiskart.bilgem.tubitak.gov.tr/tr/destek/).
+- A USB e-signature reader, card, and an appropriate ARM64 card driver. The app offers the official AKİS ARM driver installer when that driver is missing.
 - A valid signing request downloaded from TÜBİTAK.
+- Internet access to TÜBİTAK, including the first-use signing-client download.
 
 You do not need a separate Java installation or Rosetta.
 
-## Install
+## Build and install from source
+
+Source installation requires Xcode Command Line Tools. The installer starts Apple's installation prompt if they are missing; finish that installation and run the command again.
 
 Run as your normal user:
 
@@ -21,7 +23,13 @@ Run as your normal user:
 curl -fsSL https://raw.githubusercontent.com/otcan/tubitak-eimza-mac-arm64/main/kur.sh | bash
 ```
 
-The installer builds and locally signs **TUBITAK Signing Helper.app**, installs it in `~/Applications`, and registers it with macOS. It downloads a pinned Amazon Corretto 8 ARM64 runtime and the official TÜBİTAK application, checks their SHA-256 hashes, and verifies the JAR signature. It does not replace system Java or change global Gatekeeper settings.
+The installer builds and locally signs **TUBITAK Signing Helper.app**, installs it in `~/Applications`, and registers it with macOS. The build downloads a pinned Amazon Corretto 8 ARM64 runtime and the official TÜBİTAK application for compilation, checks their SHA-256 hashes, and verifies the JAR signature. The proprietary JAR is not copied into the app or redistributed in a release. It does not replace system Java or change global Gatekeeper settings.
+
+## AKİS driver setup
+
+The helper checks `/usr/local/lib/libakisp11.dylib` for ARM64 support. If it is missing or Intel-only, click **Install AKİS driver…**. The helper downloads the reviewed **AKİA 6.8.13 ARM** archive directly from [TÜBİTAK BİLGEM](https://akiskart.bilgem.tubitak.gov.tr/en/support/), verifies the archive and package hashes and TÜBİTAK's installer signature, then opens Apple's Installer. Complete the normal macOS administrator approval yourself, return to the helper, and click **Check USB card**.
+
+An existing ARM driver is left in place. The installer is not bundled or silently installed, and the helper never asks for your administrator password. For AKİA 6.7.6 or earlier, follow the official support page's removal instructions before installing a newer version.
 
 ## Sign a document
 
@@ -46,7 +54,7 @@ sublimity-esign-client-swingui-1.21.0-SNAPSHOT-jar-with-dependencies.jar
 
 This is a TÜBİTAK-specific launcher. It rejects other codebases, application classes, JAR versions, signing destinations, duplicate parameters, external XML entities, oversized files, and symbolic links.
 
-**End-to-end signing confirmed by a user on 16 November 2026**, on an Apple Silicon Mac running **macOS 26.2**: the app opened a real TÜBİTAK JNLP request using its bundled Java runtime, and TÜBİTAK confirmed the resulting signature. This is one confirmed setup; additional card, driver, and provider combinations need testing.
+**End-to-end signing with version 0.1.0 was confirmed by a user on 16 November 2026**, on an Apple Silicon Mac running **macOS 26.2**: the app opened a real TÜBİTAK JNLP request using its bundled Java runtime, and TÜBİTAK confirmed the resulting signature. This is one confirmed setup; additional card, driver, and provider combinations need testing. Version 0.2.0's packaging and driver setup changes have been checked locally; a new hardware signing run has not yet been repeated for that version.
 
 ## Build and test
 
@@ -82,12 +90,12 @@ These logs can contain signing-job or certificate information. Redact them befor
 - A Swift/AppKit launcher handles file selection and macOS document-open events.
 - A small Java `AppletStub` host supplies the validated JNLP parameters to TÜBİTAK's unchanged `SignApplet`.
 - The app contains its own Corretto 8 runtime. The system's PKCS#11 card driver provides access to the USB card.
-- The build applies an ad-hoc local code signature. The app is not notarized.
-- Only the reviewed TÜBİTAK application version is bundled. Upstream changes need a reviewed dependency/hash update.
+- Source builds apply an ad-hoc local signature. The release workflow supports Developer ID signing, hardened runtime, Apple notarization and stapled tickets; see [release instructions](RELEASING.md).
+- Only the reviewed TÜBİTAK application version is accepted. It is downloaded from TÜBİTAK at first use and verified again before each launch. Upstream changes need a reviewed dependency/hash update.
 - CI checks the request parser using synthetic data. It does not perform hardware signing or submit documents to TÜBİTAK.
 
 ## License and related work
 
-The helper's source is [MIT licensed](LICENSE). Amazon Corretto/OpenJDK and TÜBİTAK's application retain their own licenses; see [third-party notices](THIRD_PARTY_NOTICES.md). The build copies Corretto's license notices into the generated app.
+The helper's source is [MIT licensed](LICENSE). Amazon Corretto/OpenJDK and TÜBİTAK's application retain their own licenses; see [third-party notices](THIRD_PARTY_NOTICES.md). The build copies Corretto's license notices into the generated app. The original app icon was generated using imagegen; its [design prompt](assets/icon-prompt.txt) is included.
 
 Related projects include [TÜBİTAK JNLP macOS Helper](https://github.com/kadirseker00/tubitak-jnlp-macos-helper) and [TNB E-İmza for Apple Silicon](https://github.com/saidsurucu/tnb-eimza-mac-arm64).

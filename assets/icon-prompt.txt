@@ -1,0 +1,3 @@
+Generated with the built-in imagegen tool.
+
+Use case: logo-brand. A finished macOS application icon. An original fountain-pen nib drawing a signature stroke, with a verification check. Soft rounded-square tile, restrained dimensional depth, crisp generous shapes, subtle material highlights, legible at 32 pixels. Clean neutral and system-accent colors. Transparent outside the tile. No letters, words, numerals, watermark, or official TÜBİTAK/government logo.

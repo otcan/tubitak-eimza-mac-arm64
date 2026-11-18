@@ -1,0 +1,17 @@
+TUBITAK Signing Helper — Apple Silicon
+
+Drag TUBITAK Signing Helper.app to Applications, then open it there.
+
+Java is included. On first use, the helper downloads and verifies the original
+signing client directly from TÜBİTAK.
+
+For AKİS cards, use the app's Install AKİS driver button if the ARM driver is
+missing. Complete the official installer and macOS administrator approval.
+
+Download a fresh .jnlp from TÜBİTAK, open it with the helper, review the documents,
+then enter your USB card PIN in TÜBİTAK's signing window. Check the result on the
+TÜBİTAK website.
+
+This is an unofficial community helper, independent of TÜBİTAK and Kamu SM.
+Source, notices and support:
+https://github.com/otcan/tubitak-eimza-mac-arm64
