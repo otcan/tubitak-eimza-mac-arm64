@@ -13,6 +13,14 @@ This is an **unofficial community project**, independent of TÜBİTAK and Kamu S
 
 You do not need a separate Java installation or Rosetta.
 
+## Install the app
+
+1. [Download the signed and notarized 0.2.0 DMG](https://github.com/otcan/tubitak-eimza-mac-arm64/releases/download/v0.2.0/Tubitak-Signing-Helper-0.2.0-arm64.dmg).
+2. Open the DMG and drag **TUBITAK Signing Helper.app** to **Applications**.
+3. Open the app. If your AKİS ARM driver is missing, use **Install AKİS driver…** and finish the official installer.
+
+The DMG and app are Developer ID signed, notarized by Apple, and include stapled notarization tickets. The signing identity is **Taraftech UG (haftungsbeschrankt)**. This download does not require Xcode tools or Terminal. Checksums and the matching Java source archive are on the [release page](https://github.com/otcan/tubitak-eimza-mac-arm64/releases/tag/v0.2.0).
+
 ## Build and install from source
 
 Source installation requires Xcode Command Line Tools. The installer starts Apple's installation prompt if they are missing; finish that installation and run the command again.
